@@ -14,7 +14,7 @@ Performs case-insensitive string replacements on user-typed prompts. The primary
 - **Word boundary aware**: Won't replace `must` inside `customer`
 - **Multi-word phrases**: `must not` is matched as a unit (before `must` alone)
 - **Hot reload**: Config changes take effect immediately (no restart needed)
-- **JSONC support**: Comments allowed in config file
+- **JSONC support**: Comments and trailing commas allowed in config file
 
 ### Scope
 
@@ -24,7 +24,7 @@ Performs case-insensitive string replacements on user-typed prompts. The primary
 
 ## Configuration
 
-**Config file**: `~/.config/opencode/must-have-plugin.json`
+**Config file**: `~/.config/opencode/MUST-have-plugin.jsonc`
 
 If the config file doesn't exist, it's automatically created with RFC2119 defaults.
 
@@ -82,7 +82,7 @@ Add your own replacement pairs to the `replacements` object:
 
 Enable debug mode to see what replacements are being made:
 
-1. Edit `~/.config/opencode/must-have-plugin.json`
+1. Edit `~/.config/opencode/MUST-have-plugin.jsonc`
 2. Uncomment or add `"debug": true`
 3. View logs in real-time:
 
@@ -115,8 +115,8 @@ The default configuration includes all keywords from [RFC 2119](https://datatrac
 
 ### Replacements not working
 
-1. Check that the config file exists: `cat ~/.config/opencode/must-have-plugin.json`
-2. Verify JSON syntax is valid (remember: JSONC allows `//` comments)
+1. Check that the config file exists: `cat ~/.config/opencode/MUST-have-plugin.jsonc`
+2. Verify JSONC syntax is valid (comments and trailing commas are allowed)
 3. Enable debug mode and check the log file
 
 ### Unexpected replacements
@@ -130,5 +130,5 @@ The default configuration includes all keywords from [RFC 2119](https://datatrac
 The plugin re-reads the config on every message, so changes should be immediate. If not:
 
 1. Verify you saved the config file
-2. Check for JSON syntax errors
+2. Check for JSONC syntax errors
 3. Restart OpenCode as a last resort

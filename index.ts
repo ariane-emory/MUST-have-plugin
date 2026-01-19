@@ -120,7 +120,10 @@ function parseJSONC(content: string): any {
   // Also strip multi-line comments /* ... */
   const noMultiLine = stripped.replace(/\/\*[\s\S]*?\*\//g, "")
 
-  return JSON.parse(noMultiLine)
+  // Strip trailing commas before ] or } (for JSONC compatibility)
+  const noTrailingCommas = noMultiLine.replace(/,(\s*[}\]])/g, "$1")
+
+  return JSON.parse(noTrailingCommas)
 }
 
 /**
