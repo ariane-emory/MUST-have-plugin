@@ -1,18 +1,18 @@
 /**
- * Replacer Plugin
+ * MUST-have-plugin (Replacer Plugin)
  *
  * Performs case-insensitive string replacements on user-typed prompts
  * before they're sent to the LLM.
  *
  * Config: ~/.config/opencode/MUST-have-plugin.jsonc (JSONC format)
- * Debug log: /tmp/opencode-MUST-have-plugin-debug.log
+ * Logs: ~/.local/share/opencode/log/dev.log (filter by service=MUST-have-plugin)
  *
  * Features:
  * - Case-insensitive matching with word boundaries
  * - Multi-word phrase support (longest-first matching)
  * - Hot reload: config re-read on every message
  * - Auto-generates RFC2119 defaults if no config exists
- * - JSONC support (comments allowed in config)
+ * - JSONC support (comments and trailing commas allowed in config)
  *
  * Scope:
  * - Only replaces in user-typed prompts
@@ -20,14 +20,17 @@
  * - Does NOT modify slash command output
  */
 import type { Plugin } from "@opencode-ai/plugin"
-import { readFileSync, writeFileSync, existsSync, appendFileSync } from "fs"
+import { readFileSync, writeFileSync, existsSync } from "fs"
 import { resolve } from "path"
 
 const CONFIG_PATH = resolve(process.env.HOME || "", ".config", "opencode", "MUST-have-plugin.jsonc")
-const DEBUG_LOG = "/tmp/opencode-MUST-have-plugin-debug.log"
+const SERVICE_NAME = "MUST-have-plugin"
 
 // Track debug state (loaded from config)
 let debugEnabled = false
+
+// SDK client reference for logging (set during plugin init)
+let sdkClient: Parameters<Plugin>[0]["client"] | null = null
 
 /**
  * RFC2119 default replacements
@@ -52,7 +55,8 @@ const RFC2119_DEFAULTS: Record<string, string> = {
  * Default config file content (JSONC format)
  */
 const DEFAULT_CONFIG = `{
-  // Uncomment to enable debug logging (view with: tail -f /tmp/opencode-MUST-have-plugin-debug.log)
+  // Uncomment to enable debug logging (view in: ~/.local/share/opencode/log/dev.log)
+  // Filter with: grep "service=${SERVICE_NAME}" ~/.local/share/opencode/log/dev.log
   // "debug": true,
 
   "replacements": {
@@ -72,13 +76,26 @@ const DEFAULT_CONFIG = `{
 `
 
 /**
- * Write a timestamped message to the debug log file
+ * Log a message using the OpenCode SDK logging system
+ * Logs appear in ~/.local/share/opencode/log/dev.log
  */
-function log(message: string): void {
-  if (!debugEnabled) return
+async function log(
+  level: "debug" | "info" | "warn" | "error",
+  message: string,
+  extra?: Record<string, unknown>,
+): Promise<void> {
+  if (!debugEnabled && level === "debug") return
+  if (!sdkClient) return
+
   try {
-    const timestamp = new Date().toISOString()
-    appendFileSync(DEBUG_LOG, `${timestamp} ${message}\n`)
+    await sdkClient.app.log({
+      body: {
+        service: SERVICE_NAME,
+        level,
+        message,
+        extra,
+      },
+    })
   } catch {
     // Silently fail - logging should never break the plugin
   }
@@ -133,9 +150,11 @@ function ensureConfigExists(): void {
   if (!existsSync(CONFIG_PATH)) {
     try {
       writeFileSync(CONFIG_PATH, DEFAULT_CONFIG, "utf-8")
-      log(`[INIT] Created default config at ${CONFIG_PATH}`)
+      // Fire-and-forget log - don't block init
+      log("info", "Created default config", { path: CONFIG_PATH })
     } catch (error) {
-      log(`[ERROR] Failed to create default config: ${error}`)
+      // Fire-and-forget log - don't block init
+      log("error", "Failed to create default config", { error: String(error) })
     }
   }
 }
@@ -168,8 +187,8 @@ function loadConfig(): Config {
       replacements: parsed.replacements || {},
     }
   } catch (error) {
-    // Log to stderr since debug logging might not be enabled yet
-    process.stderr.write(`Replacer: [WARN] Failed to parse config: ${error}\n`)
+    // Log to stderr since SDK client might not be ready yet
+    process.stderr.write(`MUST-have-plugin: [WARN] Failed to parse config: ${error}\n`)
     return defaultConfig
   }
 }
@@ -214,19 +233,24 @@ function applyReplacements(
 }
 
 /**
- * Replacer Plugin
+ * MUST-have-plugin (Replacer Plugin)
  */
-const Replacer: Plugin = async () => {
-  // Ensure default config exists
+const Replacer: Plugin = async ({ client }) => {
+  // Store SDK client for logging
+  sdkClient = client
+
+  // Ensure default config exists (synchronous)
   ensureConfigExists()
 
   // Initial config load to get debug state
   const initialConfig = loadConfig()
   debugEnabled = initialConfig.debug
 
-  log("[INIT] Replacer plugin loaded")
-  log(`[INIT] Config path: ${CONFIG_PATH}`)
-  log(`[INIT] Loaded ${Object.keys(initialConfig.replacements).length} replacement pairs`)
+  // Fire-and-forget log during init - don't await to avoid blocking startup
+  log("info", "Plugin loaded", {
+    configPath: CONFIG_PATH,
+    replacementCount: Object.keys(initialConfig.replacements).length,
+  })
 
   return {
     "chat.message": async (input, output) => {
@@ -235,7 +259,7 @@ const Replacer: Plugin = async () => {
       debugEnabled = config.debug
 
       if (Object.keys(config.replacements).length === 0) {
-        log("[SKIP] No replacements configured")
+        await log("debug", "No replacements configured, skipping")
         return
       }
 
@@ -258,12 +282,12 @@ const Replacer: Plugin = async () => {
       }
 
       // Log replacements made
-      if (debugEnabled && totalReplacements > 0) {
+      if (totalReplacements > 0) {
+        const replacements: Record<string, { value: string; count: number }> = {}
         for (const [key, count] of allCounts) {
-          const value = config.replacements[key]
-          const plural = count === 1 ? "occurrence" : "occurrences"
-          log(`[REPLACE] '${key}' -> '${value}' (${count} ${plural})`)
+          replacements[key] = { value: config.replacements[key], count }
         }
+        await log("info", `Applied ${totalReplacements} replacement(s)`, { replacements })
       }
     },
   }

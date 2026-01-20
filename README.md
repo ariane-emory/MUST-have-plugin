@@ -32,7 +32,7 @@ If the config file doesn't exist, it's automatically created with RFC2119 defaul
 
 ```jsonc
 {
-  // Uncomment to enable debug logging (view with: tail -f /tmp/opencode-must-have-plugin-debug.log)
+  // Uncomment to enable debug logging (logs appear in OpenCode's log file)
   // "debug": true,
 
   "replacements": {
@@ -75,28 +75,38 @@ Add your own replacement pairs to the `replacements` object:
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `debug` | boolean | `false` | Enable debug logging to `/tmp/opencode-must-have-plugin-debug.log` |
+| `debug` | boolean | `false` | Enable debug logging to OpenCode's log file |
 | `replacements` | object | RFC2119 keywords | Key-value pairs for text replacement |
 
 ## Debug Logging
+
+Logs are written to OpenCode's unified log file using the SDK logging system.
+
+**Log location**: `~/.local/share/opencode/log/dev.log`
 
 Enable debug mode to see what replacements are being made:
 
 1. Edit `~/.config/opencode/MUST-have-plugin.jsonc`
 2. Uncomment or add `"debug": true`
-3. View logs in real-time:
+3. View logs in real-time (filtering by this plugin):
 
 ```bash
-tail -f /tmp/opencode-must-have-plugin-debug.log
+tail -f ~/.local/share/opencode/log/dev.log | grep "MUST-have-plugin"
+```
+
+Or view all recent plugin logs:
+
+```bash
+grep "MUST-have-plugin" ~/.local/share/opencode/log/dev.log | tail -20
 ```
 
 ### Log Format
 
+Logs use OpenCode's standard format with structured metadata:
+
 ```
-2026-01-19T15:30:42.123Z [INIT] Replacer plugin loaded
-2026-01-19T15:30:42.124Z [INIT] Loaded 11 replacement pairs
-2026-01-19T15:31:05.456Z [REPLACE] 'must' -> 'MUST' (2 occurrences)
-2026-01-19T15:31:05.457Z [REPLACE] 'should not' -> 'SHOULD NOT' (1 occurrence)
+INFO  2026-01-20T15:30:42 +2ms service=MUST-have-plugin Plugin loaded
+INFO  2026-01-20T15:31:05 +5ms service=MUST-have-plugin Applied 3 replacement(s) replacements={"must":{"value":"MUST","count":2},"should":{"value":"SHOULD","count":1}}
 ```
 
 ## RFC2119 Keywords
