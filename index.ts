@@ -271,7 +271,7 @@ const Replacer: Plugin = async ({ client }) => {
       for (const part of output.parts) {
         if (part.type === "text" && "text" in part && typeof part.text === "string") {
           const { result, counts } = applyReplacements(part.text, config.replacements)
-          ;(part as { text: string }).text = result
+          ;(part as any).text = result
 
           // Merge counts
           for (const [key, count] of counts) {
