@@ -217,10 +217,10 @@ const Replacer = async ({ client }) => {
             }
             let totalReplacements = 0;
             const allCounts = new Map();
-            // Apply to text-type parts only (not file content, not other part types)
-            // User-typed content comes through as TextPart with type === "text"
+            // Apply to user-typed text only (not file content, not slash command output, not synthetic)
+            // User-typed content: type === "text" && synthetic !== true
             for (const part of output.parts) {
-                if (part.type === "text" && "text" in part && typeof part.text === "string") {
+                if (part.type === "text" && "text" in part && typeof part.text === "string" && !part.synthetic) {
                     const { result, counts } = applyReplacements(part.text, config.replacements);
                     part.text = result;
                     // Merge counts
