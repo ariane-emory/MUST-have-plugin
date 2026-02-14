@@ -204,30 +204,42 @@ function escapeRegex(str: string): string {
  * Apply all replacements to the given text
  * - Case-insensitive matching
  * - Word boundary aware (won't replace "must" inside "customer")
- * - Longest phrases matched first (to handle "must not" before "must")
+ * - Single-pass: all patterns matched at once to prevent re-replacement
+ *   (e.g., "must not" → "**MUST NOT**" should NOT then match "must" and "not")
  */
 function applyReplacements(
   text: string,
   replacements: Record<string, string>,
 ): { result: string; counts: Map<string, number> } {
-  // Sort keys by length descending (longest first)
+  if (Object.keys(replacements).length === 0) {
+    return { result: text, counts: new Map() }
+  }
+
+  // Sort keys by length descending (longest first) for proper matching priority
   const sortedKeys = Object.keys(replacements).sort((a, b) => b.length - a.length)
 
-  let result = text
+  // Build a single regex that matches any of the patterns
+  // Uses a capture group to identify which pattern matched
+  const patternStrings = sortedKeys.map((key) => `\\b${escapeRegex(key)}\\b`)
+  const combinedPattern = new RegExp(`(${patternStrings.join("|")})`, "gi")
+
+  // Build a case-insensitive lookup map
+  const lookup = new Map<string, string>()
+  for (const key of sortedKeys) {
+    lookup.set(key.toLowerCase(), replacements[key])
+  }
+
   const counts = new Map<string, number>()
 
-  for (const key of sortedKeys) {
-    const value = replacements[key]
-    // Create case-insensitive regex with word boundaries
-    const pattern = new RegExp(`\\b${escapeRegex(key)}\\b`, "gi")
-
-    // Count occurrences before replacement
-    const matches = result.match(pattern)
-    if (matches && matches.length > 0) {
-      counts.set(key, matches.length)
-      result = result.replace(pattern, value)
+  // Single-pass replacement: each match is replaced exactly once
+  const result = text.replace(combinedPattern, (match) => {
+    const replacement = lookup.get(match.toLowerCase())
+    if (replacement) {
+      counts.set(match.toLowerCase(), (counts.get(match.toLowerCase()) || 0) + 1)
+      return replacement
     }
-  }
+    return match
+  })
 
   return { result, counts }
 }
