@@ -160,8 +160,8 @@ function escapeRegex(str) {
  * Apply all replacements to the given text
  * - Case-insensitive matching
  * - Word boundary aware (won't replace "must" inside "customer")
+ * - Won't match inside markdown formatting (won't replace MUST inside **MUST**)
  * - Single-pass: all patterns matched at once to prevent re-replacement
- *   (e.g., "must not" → "**MUST NOT**" should NOT then match "must" and "not")
  */
 function applyReplacements(text, replacements) {
     if (Object.keys(replacements).length === 0) {
@@ -170,8 +170,10 @@ function applyReplacements(text, replacements) {
     // Sort keys by length descending (longest first) for proper matching priority
     const sortedKeys = Object.keys(replacements).sort((a, b) => b.length - a.length);
     // Build a single regex that matches any of the patterns
-    // Uses a capture group to identify which pattern matched
-    const patternStrings = sortedKeys.map((key) => `\\b${escapeRegex(key)}\\b`);
+    // Uses negative lookbehind/lookahead to exclude matches inside markdown formatting
+    // (?<![a-zA-Z*_]) = not preceded by letter, asterisk, or underscore
+    // (?![a-zA-Z*_]) = not followed by letter, asterisk, or underscore
+    const patternStrings = sortedKeys.map((key) => `(?<![a-zA-Z*_])${escapeRegex(key)}(?![a-zA-Z*_])`);
     const combinedPattern = new RegExp(`(${patternStrings.join("|")})`, "gi");
     // Build a case-insensitive lookup map
     const lookup = new Map();
