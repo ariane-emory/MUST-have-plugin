@@ -88,8 +88,6 @@ Add your own replacement pairs to the `replacements` object:
     "should": "**SHOULD**",
   }
 }
-  }
-}
 ```
 
 ### Configuration Options
