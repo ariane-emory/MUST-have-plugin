@@ -63,8 +63,9 @@ Add your own replacement pairs to the `replacements` object:
 
   "replacements": {
     "rfc": "The key words \"**MUST**\", \"**MUST NOT**\", \"**REQUIRED**\", \"**SHALL**\", \"**SHALL NOT**\", \"**SHOULD**\", \"**SHOULD NOT**\", \"**RECOMMENDED**\", \"**MAY**\", and \"**OPTIONAL**\" in this message are to be interpreted as described in RFC2119.\n\n",
-    "dfp": "Diagnose and fix this problem: ",
-    "always": "**ALWAYS**",
+    "dfp": "Diagnose and fix this problem:",
+    "mnm": "Make no mistakes!",
+"always": "**ALWAYS**",
     "may": "**MAY**",
     "must always": "**MUST ALWAYS**",
     "must never" : "**MUST NEVER**",
