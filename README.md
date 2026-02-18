@@ -11,7 +11,7 @@ Performs case-insensitive string replacements on user-typed prompts. The primary
 ### Features
 
 - **Case-insensitive matching**: `must`, `Must`, and `MUST` all match
-- **Word boundary aware**: Won't replace `must` inside `customer`
+- **Word boundary aware**: Won't replace `may` inside `maybe`
 - **Multi-word phrases**: `must not` is matched as a unit (before `must` alone)
 - **Hot reload**: Config changes take effect immediately (no restart needed)
 - **JSONC support**: Comments and trailing commas allowed in config file
