@@ -81,7 +81,7 @@ Add your own replacement pairs to the `replacements` object:
     "recommended": "**RECOMMENDED**",
     "required": "**REQUIRED**",
     "shall not": "**SHALL NOT**",
-    "shant": "**SHALL NOT**",
+    "shan'st": "**SHALL NOT**",
     "shall": "**SHALL**",
     "should not": "**SHOULD NOT**",
     "shouldn't": "**SHOULD NOT**",
