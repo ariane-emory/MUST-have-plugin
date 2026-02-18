@@ -32,6 +32,9 @@ let debugEnabled = false
 // SDK client reference for logging (set during plugin init)
 let sdkClient: Parameters<Plugin>[0]["client"] | null = null
 
+// Track sessions that just executed a slash command (to skip replacement)
+const sessionsWithCommand = new Set<string>()
+
 /**
  * RFC2119 default replacements
  * These keywords are used in technical specifications to indicate requirement levels.
@@ -267,7 +270,19 @@ const Replacer: Plugin = async ({ client }) => {
   })
 
   return {
+    "command.execute.before": async (input) => {
+      sessionsWithCommand.add(input.sessionID)
+      await log("debug", "Tracking command execution", { sessionID: input.sessionID, command: input.command })
+    },
+
     "chat.message": async (input, output) => {
+      // Skip processing if this message came from a slash command execution
+      if (sessionsWithCommand.has(input.sessionID)) {
+        sessionsWithCommand.delete(input.sessionID)
+        await log("debug", "Skipping replacements - message from slash command", { sessionID: input.sessionID })
+        return
+      }
+
       // Hot reload: re-read config on every message
       const config = loadConfig()
       debugEnabled = config.debug
