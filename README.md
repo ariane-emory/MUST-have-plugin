@@ -57,16 +57,36 @@ Add your own replacement pairs to the `replacements` object:
 
 ```jsonc
 {
+{
+  // Uncomment to enable debug logging (view with: tail -f /tmp/opencode-replacer-debug.log)
+  // "debug": true,
+
   "replacements": {
-    // RFC2119 keywords
-    "must": "MUST",
-    "should": "SHOULD",
-    
-    // Custom replacements
-    "todo": "TODO",
-    "fixme": "FIXME",
-    "api": "API",
-    "url": "URL"
+    "rfc": "The key words \"**MUST**\", \"**MUST NOT**\", \"**REQUIRED**\", \"**SHALL**\", \"**SHALL NOT**\", \"**SHOULD**\", \"**SHOULD NOT**\", \"**RECOMMENDED**\", \"**MAY**\", and \"**OPTIONAL**\" in this message are to be interpreted as described in RFC2119.\n\n",
+    "dfp": "Diagnose and fix this problem: ",
+    "always": "**ALWAYS**",
+    "may": "**MAY**",
+    "must always": "**MUST ALWAYS**",
+    "must never" : "**MUST NEVER**",
+    "must not" : "**MUST NOT**",
+    "mustn't" : "**MUST NOT**",
+    "must": "**MUST**",
+    "never": "**NEVER**",
+    "not recommended": "**NOT RECOMMENDED**",
+    "not": "**NOT**",
+    "optional": "**OPTIONAL**",
+    "ought": "**SHOULD**",
+    "oughtn't": "**SHOULD NOT**",
+    "recommended": "**RECOMMENDED**",
+    "required": "**REQUIRED**",
+    "shall not": "**SHALL NOT**",
+    "shant": "**SHALL NOT**",
+    "shall": "**SHALL**",
+    "should not": "**SHOULD NOT**",
+    "shouldn't": "**SHOULD NOT**",
+    "should": "**SHOULD**",
+  }
+}
   }
 }
 ```
