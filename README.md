@@ -57,7 +57,6 @@ Add your own replacement pairs to the `replacements` object:
 
 ```jsonc
 {
-{
   // Uncomment to enable debug logging (view with: tail -f /tmp/opencode-replacer-debug.log)
   // "debug": true,
 
@@ -86,7 +85,6 @@ Add your own replacement pairs to the `replacements` object:
     "should not": "**SHOULD NOT**",
     "shouldn't": "**SHOULD NOT**",
     "should": "**SHOULD**",
-  }
 }
 ```
 
