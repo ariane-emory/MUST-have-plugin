@@ -237,14 +237,26 @@ function applyReplacements(
   const counts = new Map<string, number>()
 
   // Single-pass replacement: each match is replaced exactly once
-  const result = text.replace(combinedPattern, (match) => {
-    const replacement = lookup.get(match.toLowerCase())
+  let lastIndex = 0
+  let result = ""
+  let match: RegExpExecArray | null
+
+  while ((match = combinedPattern.exec(text)) !== null) {
+    const replacement = lookup.get(match[0].toLowerCase())
     if (replacement) {
-      counts.set(match.toLowerCase(), (counts.get(match.toLowerCase()) || 0) + 1)
-      return replacement
+      counts.set(match[0].toLowerCase(), (counts.get(match[0].toLowerCase()) || 0) + 1)
+      result += text.slice(lastIndex, match.index) + replacement
+      lastIndex = match.index + match[0].length
+      // If replacement ends with whitespace, consume trailing space from original text
+      if (/\s$/.test(replacement) && text[lastIndex] === " ") {
+        lastIndex++
+      }
+    } else {
+      result += text.slice(lastIndex, match.index) + match[0]
+      lastIndex = match.index + match[0].length
     }
-    return match
-  })
+  }
+  result += text.slice(lastIndex)
 
   return { result, counts }
 }
