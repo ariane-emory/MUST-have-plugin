@@ -223,9 +223,9 @@ function applyReplacements(
 
   // Build a single regex that matches any of the patterns
   // Uses negative lookbehind/lookahead to exclude matches inside markdown formatting
-  // (?<![a-zA-Z*_]) = not preceded by letter, asterisk, or underscore
-  // (?![a-zA-Z*_]) = not followed by letter, asterisk, or underscore
-  const patternStrings = sortedKeys.map((key) => `(?<![a-zA-Z*_])${escapeRegex(key)}(?![a-zA-Z*_])`)
+  // (?<![a-zA-Z*_'']) = not preceded by letter, asterisk, underscore, or apostrophe
+  // (?![a-zA-Z*_'']) = not followed by letter, asterisk, underscore, or apostrophe
+  const patternStrings = sortedKeys.map((key) => `(?<![a-zA-Z*_''])${escapeRegex(key)}(?![a-zA-Z*_''])`)
   const combinedPattern = new RegExp(`(${patternStrings.join("|")})`, "gi")
 
   // Build a case-insensitive lookup map
