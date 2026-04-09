@@ -61,18 +61,27 @@ Add your own replacement pairs to the `replacements` object:
   // "debug": true,
 
   "replacements": {
-    "rfc": "The key words \"**MUST**\", \"**MUST NOT**\", \"**REQUIRED**\", \"**SHALL**\", \"**SHALL NOT**\", \"**SHOULD**\", \"**SHOULD NOT**\", \"**RECOMMENDED**\", \"**MAY**\", and \"**OPTIONAL**\" in this message are to be interpreted as described in RFC2119.\n\n",
-    "dfp": "Diagnose and fix this problem:",
+    "bl.md": "~/.config/opencode/supplemental/md/branch-list.md",
+    "dfp": "Diagnose and fix this problem: ",
     "mnm": "Make no mistakes!",
-"always": "**ALWAYS**",
+    "rfc!": "The key words \"**MUST**\", \"**MUST NOT**\", \"**REQUIRED**\", \"**SHALL**\", \"**SHALL NOT**\", \"**SHOULD**\", \"**SHOULD NOT**\", \"**RECOMMENDED**\", \"**MAY**\", and \"**OPTIONAL**\" in this message are to be interpreted as described in RFC2119.\n\n",
+
+    "pto": "push that to origin,",
+    "mb": "return to the initial branch and merge the new branch back in.",
+
+    "always": "**ALWAYS**",
+    "ever": "**EVER**",
+    "head": "HEAD",
+    "may not": "**MAY NOT**",
     "may": "**MAY**",
     "must always": "**MUST ALWAYS**",
     "must never" : "**MUST NEVER**",
     "must not" : "**MUST NOT**",
-    "mustn't" : "**MUST NOT**",
     "must": "**MUST**",
+    "mustn't" : "**MUST NOT**",
     "never": "**NEVER**",
     "not recommended": "**NOT RECOMMENDED**",
+    "nothing": "**NOTHING**",
     "not": "**NOT**",
     "optional": "**OPTIONAL**",
     "ought": "**SHOULD**",
@@ -80,11 +89,12 @@ Add your own replacement pairs to the `replacements` object:
     "recommended": "**RECOMMENDED**",
     "required": "**REQUIRED**",
     "shall not": "**SHALL NOT**",
-    "shan'st": "**SHALL NOT**",
+    "shan't": "**SHALL NOT**",
     "shall": "**SHALL**",
     "should not": "**SHOULD NOT**",
     "shouldn't": "**SHOULD NOT**",
     "should": "**SHOULD**",
+  }
 }
 ```
 

@@ -13,6 +13,7 @@
 
     "always": "**ALWAYS**",
     "ever": "**EVER**",
+    "head": "HEAD",
     "may not": "**MAY NOT**",
     "may": "**MAY**",
     "must always": "**MUST ALWAYS**",
