@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@ariane-emory/must-have-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "OpenCode plugin that applies configurable prompt text replacements, including RFC2119 keyword capitalization.",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,6 +10,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./server": {
+      "import": "./dist/server.js",
+      "types": "./dist/server.d.ts"
     }
   },
   "files": [
