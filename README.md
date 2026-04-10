@@ -202,9 +202,12 @@ The plugin re-reads the config on every message, so changes should be immediate.
 ## Publishing
 
 ```bash
+npm install
 npm login
 npm run build
 npm publish --access public
 ```
+
+`npm publish` does not install dev dependencies for you. Run `npm install` first in a fresh checkout so `typescript` and `@types/node` are available for the `prepublishOnly` build.
 
 For a preflight check before publishing, run `npm publish --dry-run`.
