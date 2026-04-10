@@ -17,6 +17,8 @@ Add the published package to your OpenCode config:
 
 OpenCode installs npm plugins automatically at startup.
 
+The published package also includes `MUST-have-plugin.custom-sample.jsonc` as a starter config you can copy into `~/.config/opencode/MUST-have-plugin.jsonc`.
+
 ### From Source
 
 ```bash
@@ -30,6 +32,8 @@ Then copy the built file into your OpenCode plugins directory:
 mkdir -p ~/.config/opencode/plugins
 cp dist/index.js ~/.config/opencode/plugins/MUST-have-plugin.js
 ```
+
+The sample config file is available at the package root as `MUST-have-plugin.custom-sample.jsonc`.
 
 ## What It Does
 
