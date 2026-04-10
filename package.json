@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@ariane-emory/must-have-plugin",
+  "version": "1.0.0",
+  "description": "OpenCode plugin that applies configurable prompt text replacements, including RFC2119 keyword capitalization.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "plugin",
+    "rfc2119",
+    "text-replacement"
+  ],
+  "author": "Ariane Emory",
+  "license": "MIT",
+  "homepage": "https://github.com/ariane-emory/MUST-have-plugin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ariane-emory/MUST-have-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ariane-emory/MUST-have-plugin/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.4.3",
+    "@types/node": "^22.13.9",
+    "typescript": "^5.8.2"
+  }
+}

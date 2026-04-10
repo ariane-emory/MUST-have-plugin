@@ -2,6 +2,35 @@
 
 Automatically replaces text patterns in your prompts before they're sent to the LLM.
 
+## Installation
+
+### From npm
+
+Add the published package to your OpenCode config:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["@ariane-emory/must-have-plugin"]
+}
+```
+
+OpenCode installs npm plugins automatically at startup.
+
+### From Source
+
+```bash
+npm install
+npm run build
+```
+
+Then copy the built file into your OpenCode plugins directory:
+
+```bash
+mkdir -p ~/.config/opencode/plugins
+cp dist/index.js ~/.config/opencode/plugins/MUST-have-plugin.js
+```
+
 ## What It Does
 
 Performs case-insensitive string replacements on user-typed prompts. The primary use case is auto-capitalizing RFC2119 keywords (MUST, SHOULD, MAY, etc.) in technical specifications.
@@ -169,3 +198,13 @@ The plugin re-reads the config on every message, so changes should be immediate.
 1. Verify you saved the config file
 2. Check for JSONC syntax errors
 3. Restart OpenCode as a last resort
+
+## Publishing
+
+```bash
+npm login
+npm run build
+npm publish --access public
+```
+
+For a preflight check before publishing, run `npm publish --dry-run`.

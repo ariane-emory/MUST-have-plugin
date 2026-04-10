@@ -264,7 +264,7 @@ function applyReplacements(
 /**
  * MUST-have-plugin (Replacer Plugin)
  */
-const Replacer: Plugin = async ({ client }) => {
+export const MustHavePlugin: Plugin = async ({ client }) => {
   // Store SDK client for logging
   sdkClient = client
 
@@ -334,4 +334,4 @@ const Replacer: Plugin = async ({ client }) => {
   }
 }
 
-export default Replacer
+export default MustHavePlugin
