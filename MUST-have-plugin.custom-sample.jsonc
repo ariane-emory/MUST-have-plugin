@@ -21,7 +21,7 @@
     "must not" : "**MUST NOT**",
     "must": "**MUST**",
     "mustn't" : "**MUST NOT**",
-    "never": "**NEVER**",
+    // "never": "**NEVER**",
     "not recommended": "**NOT RECOMMENDED**",
     // "nothing": "**NOTHING**",
     // "not": "**NOT**",
